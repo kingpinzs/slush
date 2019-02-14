@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 'use strict';
-var gutil = require('gulp-util');
+var fancyLog = require('fancy-log');
 var prettyTime = require('pretty-hrtime');
 var glob = require('glob');
 var path = require('path');
@@ -43,11 +43,11 @@ var cli = new Liftoff({
 });
 
 cli.on('require', function(name) {
-  gutil.log('Requiring external module', chalk.magenta(name));
+  fancyLog('Requiring external module', chalk.magenta(name));
 });
 
 cli.on('requireFail', function(name) {
-  gutil.log(chalk.red('Failed to load external module'), chalk.magenta(name));
+  fancyLog(chalk.red('Failed to load external module'), chalk.magenta(name));
 });
 
 cli.launch({
@@ -64,7 +64,7 @@ function handleArguments(env) {
   if (versionFlag) {
     log(slushPackage.version);
     if (env.modulePackage) {
-      gutil.log(env.modulePackage.version);
+      fancyLog(env.modulePackage.version);
     }
     if (generator.pkg.version) {
       console.log('[' + chalk.green('slush-' + generator.name) + '] ' + generator.pkg.version);
@@ -73,7 +73,7 @@ function handleArguments(env) {
   }
 
   if (!env.modulePath) {
-    gutil.log(chalk.red('No local gulp install found in'), chalk.magenta(generator.path));
+    fancyLog(chalk.red('No local gulp install found in'), chalk.magenta(generator.path));
     log(chalk.red('This is an issue with the `slush-' + generator.name + '` generator'));
     process.exit(1);
   }
@@ -93,7 +93,7 @@ function handleArguments(env) {
 
   if (process.cwd() !== env.cwd) {
     process.chdir(env.cwd);
-    gutil.log('Working directory changed to', chalk.magenta(env.cwd));
+    fancyLog('Working directory changed to', chalk.magenta(env.cwd));
   }
 
   process.nextTick(function() {
@@ -146,7 +146,7 @@ function logTasks(name, localGulp) {
   tree.label = 'Tasks for generator ' + chalk.magenta(name);
   archy(tree).split('\n').forEach(function(v) {
     if (v.trim().length === 0) return;
-    gutil.log(v);
+    fancyLog(v);
   });
 }
 
@@ -163,17 +163,17 @@ function logEvents(name, gulpInst) {
   var names = getEventNames(gulpInst);
 
   gulpInst.on(names.task_start, function(e) {
-    gutil.log('Starting', "'" + chalk.cyan(name + ':' + taskName(e)) + "'...");
+    fancyLog('Starting', "'" + chalk.cyan(name + ':' + taskName(e)) + "'...");
   });
 
   gulpInst.on(names.task_stop, function(e) {
-    gutil.log('Finished', "'" + chalk.cyan(name + ':' + taskName(e)) + "'", 'after', chalk.magenta(taskDuration(e)));
+    fancyLog('Finished', "'" + chalk.cyan(name + ':' + taskName(e)) + "'", 'after', chalk.magenta(taskDuration(e)));
   });
 
   gulpInst.on(names.task_error, function(e) {
     console.error('ERR', e);
     var msg = formatError(e);
-    gutil.log("'" + chalk.cyan(name + ':' + taskName(e)) + "'", 'errored after', chalk.magenta(taskDuration(e)), chalk.red(msg));
+    fancyLog("'" + chalk.cyan(name + ':' + taskName(e)) + "'", 'errored after', chalk.magenta(taskDuration(e)), chalk.red(msg));
   });
 
   gulpInst.on('task_not_found', function(err) {

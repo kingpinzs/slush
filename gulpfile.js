@@ -19,7 +19,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-  log('Watching Files');
+  fancyLog('Watching Files');
   gulp.watch(codeFiles, taskSpec(['lint']));
 });
 
