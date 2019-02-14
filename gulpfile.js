@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var log = require('gulp-util').log;
+var fancyLog = require('fancy-log');
 
 var jshint = require('gulp-jshint');
 
@@ -12,7 +12,7 @@ function taskSpec(tasks) {
 }
 
 gulp.task('lint', function() {
-  log('Linting Files');
+  fancyLog('Linting Files');
   return gulp.src(codeFiles)
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter());
